@@ -1,4 +1,5 @@
 <?php
+// Add product
 if(isset($_POST['btn_add'])){
     $productName = $_POST['productName'];
     $productPrice = $_POST['productPrice'];
@@ -12,6 +13,16 @@ if(isset($_POST['btn_add'])){
         echo "<script>alert('Product not added')</script>";
     }
 }
+// End Add product
+
+
+
+
+
+
+
+
+
 ?>
 
 
