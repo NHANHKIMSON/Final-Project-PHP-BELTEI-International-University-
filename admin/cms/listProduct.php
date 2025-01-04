@@ -4,8 +4,8 @@ if(isset($_POST['btn_add'])){
     $productName = $_POST['productName'];
     $productPrice = $_POST['productPrice'];
     $productCategory = $_POST['productCategory'];
-    $productDescription = $_POST['producrtDescription'];
-    $sql = "INSERT INTO products (productName, productPrice, productCategory, productDescription) VALUES ('$productName', '$productPrice', '$productCategory', '$productDescription')";
+    $proDes = $_POST['proDes'];
+    $sql = "INSERT INTO products (productName, productPrice, productCategory, productDescription) VALUES ('$productName', '$productPrice', '$productCategory', '$proDes')";
     $exe = mysqli_query($conn, $sql);
     if($exe){
         echo "<script>alert('Product added successfully')</script>";
@@ -33,12 +33,12 @@ if(isset($_POST['btn_update'])){
     $productName = $_POST['productName'];
     $productPrice = $_POST['productPrice'];
     $productCategory = $_POST['productCategory'];
-    // $productDescription = $_POST['productDescription'];
-    $productDescription = "Hello nhfewjwdsjs";
-    $a = $_POST['des'];
-    echo $a;
-    $sql_up = "UPDATE products SET productName = '$productName', productPrice = '$productPrice', productCategory = '$productCategory', productDescription = '$productDescription'  WHERE id = '$id';";
+    $proDes = $_POST['proDes'];
+    $sql_up = "UPDATE products SET productName = '$productName', productPrice = '$productPrice', productCategory = '$productCategory', productDescription = '$proDes'  WHERE id = '$id';";
     $exe = mysqli_query($conn, $sql_up);
+    if($exe){
+        header('location: ./index.php');
+    }
 
 }
 
@@ -66,7 +66,7 @@ if(isset($_POST['btn_update'])){
 
     <div class="flex items-center gap-3 mb-4">
         <div class="py-3 pl-3">
-            <button type="button" href="?tag=add&id=<?=$product['id']?>" class="inline-block rounded-lg bg-blue-700 px-6 py-2 text-center font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" data-modal-target="crud-modal" data-modal-toggle="crud-modal">+</button>
+            <button type="button" href="?tag=add&id=<?=$product['id']?>" class="inline-block rounded-lg bg-blue-700 px-6 py-2 text-center font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" data-modal-target="crud-modal" data-modal-toggle="crud-modal"><i class="fa-solid fa-plus"></i></button>
         </div>
         <!-- <form action="">
             <input type="text" placeholder="Search" name="search" id="search" class="h-auto pl-10 py-2 bg-gray-200 text-sm border border-gray-500 rounded-md focus:outline-none focus:bg-white dark:bg-gray-700 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-950 dark:focus:ring-gray-500 dark:focus:border-gray-500">
@@ -120,8 +120,8 @@ if(isset($_POST['btn_update'])){
                     <?=$product['productDescription']?>
                 </td>
                 <td class="py-2">
-                    <a href="?tag=listProducts&op=update&id=<?= $product['id']?>" name="btn_update" onclick="opentModalupdate()" class="btn-update inline-block rounded-lg bg-yellow-700 px-6 py-2 text-center font-medium text-white hover:bg-yellow-800 focus:outline-none focus:ring-4 focus:ring-yellow-300 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800" data-modal-toggle="edit-modal">Edit</a>
-                    <button class="btn-delete inline-block rounded-lg bg-red-700 px-6 py-2 text-center font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-yellow-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800" data-modal-target="update-modal" data-modal-target="popup-modal" data-modal-toggle="popup-modal" data-delete-id="<?= $product['id'] ?>">Delete</button>
+                    <a href="?tag=listProducts&op=update&id=<?= $product['id']?>" name="btn_update" onclick="opentModalupdate()" class="btn-update inline-block rounded-lg bg-yellow-700 px-6 py-2 text-center font-medium text-white hover:bg-yellow-800 focus:outline-none focus:ring-4 focus:ring-yellow-300 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800" data-modal-toggle="edit-modal"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <button class="btn-delete inline-block rounded-lg bg-red-700 px-6 py-2 text-center font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-yellow-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800" data-modal-target="update-modal" data-modal-target="popup-modal" data-modal-toggle="popup-modal" data-delete-id="<?= $product['id'] ?>"><i class="fa-solid fa-trash"></i></button>
                 </td>
             </tr>
 
@@ -188,7 +188,7 @@ if(isset($_POST['btn_update'])){
                     <div class="col-span-2">
                         <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Description</label>
                         <textarea  
-                        name="des" 
+                        name="proDes" 
                         rows="4" 
                         class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                         placeholder="Write product description here"></textarea>
@@ -257,8 +257,11 @@ if($op=="update"){
                     </div>
                     <div class="col-span-2">
                         <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Description</label>
-                        <textarea id="description" name="producrtDescription" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write product description here"><?=$product['productDescription']?></textarea>
-                                            
+                        <textarea  
+                        name="proDes" 
+                        rows="4" 
+                        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                        placeholder="Write product description here"><?= $product['productDescription']?></textarea>                                            
                     </div>
                 </div>
                 <button type="submit" name="btn_update" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
