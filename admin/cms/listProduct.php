@@ -1,3 +1,19 @@
+<?php
+if(isset($_POST['btn_add'])){
+    $productName = $_POST['productName'];
+    $productPrice = $_POST['productPrice'];
+    $productCategory = $_POST['productCategory'];
+    $productDescription = $_POST['producrtDescription'];
+    $sql = "INSERT INTO products (productName, productPrice, productCategory, productDescription) VALUES ('$productName', '$productPrice', '$productCategory', '$productDescription')";
+    $exe = mysqli_query($conn, $sql);
+    if($exe){
+        echo "<script>alert('Product added successfully')</script>";
+    }else{
+        echo "<script>alert('Product not added')</script>";
+    }
+}
+?>
+
 
 <!DOCTYPE html>
 <html lang="en">
