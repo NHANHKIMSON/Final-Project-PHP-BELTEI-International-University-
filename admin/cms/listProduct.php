@@ -15,6 +15,32 @@ if(isset($_POST['btn_add'])){
 }
 // End Add product
 
+$id = "";
+$op = "";
+if(isset($_GET['op'])){
+    $op = $_GET['op'];
+}
+if(isset($_GET['id'])){
+    $id = $_GET['id'];
+}
+// echo $id;
+
+
+// Update product
+if(isset($_POST['btn_update'])){
+    // echo "<script>alert('Product updated successfully')</script>";
+    // echo $id;
+    $productName = $_POST['productName'];
+    $productPrice = $_POST['productPrice'];
+    $productCategory = $_POST['productCategory'];
+    // $productDescription = $_POST['productDescription'];
+    $productDescription = "Hello nhfewjwdsjs";
+    $a = $_POST['des'];
+    echo $a;
+    $sql_up = "UPDATE products SET productName = '$productName', productPrice = '$productPrice', productCategory = '$productCategory', productDescription = '$productDescription'  WHERE id = '$id';";
+    $exe = mysqli_query($conn, $sql_up);
+
+}
 
 
 
@@ -82,15 +108,15 @@ if(isset($_POST['btn_add'])){
                     <?=$product['productDescription']?>
                 </td>
                 <td class="py-2">
-                    <a class="btn-update inline-block rounded-lg bg-yellow-700 px-6 py-2 text-center font-medium text-white hover:bg-yellow-800 focus:outline-none focus:ring-4 focus:ring-yellow-300 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800" data-modal-target="edit-modal" data-modal-target="edit-modal" data-modal-toggle="edit-modal" data-update-id="<?= $product['id'] ?>">Edit</a>
-          
+                    <a href="?tag=listProducts&op=update&id=<?= $product['id']?>" name="btn_update" onclick="opentModalupdate()" class="btn-update inline-block rounded-lg bg-yellow-700 px-6 py-2 text-center font-medium text-white hover:bg-yellow-800 focus:outline-none focus:ring-4 focus:ring-yellow-300 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800" data-modal-toggle="edit-modal">Edit</a>
                     <button class="btn-delete inline-block rounded-lg bg-red-700 px-6 py-2 text-center font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-yellow-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800" data-modal-target="update-modal" data-modal-target="popup-modal" data-modal-toggle="popup-modal" data-delete-id="<?= $product['id'] ?>">Delete</button>
                 </td>
             </tr>
+
       <?php
             }
             ?>
-            
+         
         </tbody>
     </table>
 </div>
@@ -149,7 +175,11 @@ if(isset($_POST['btn_add'])){
                     </div>
                     <div class="col-span-2">
                         <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Description</label>
-                        <textarea id="description" name="producrtDescription" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write product description here"></textarea>                    
+                        <textarea  
+                        name="des" 
+                        rows="4" 
+                        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                        placeholder="Write product description here"></textarea>
                     </div>
                 </div>
                 <button type="submit" name="btn_add" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
@@ -162,18 +192,29 @@ if(isset($_POST['btn_add'])){
 </div> 
 <!-- End Main modal -->
 
+
+
+
+
+
 <!-- Update modal -->
-<div id="edit-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+
+<?php
+if($op=="update"){
+    $sql = "SELECT * FROM products WHERE id = '$id'";
+    $exe = mysqli_query($conn, $sql);
+    $product = mysqli_fetch_assoc($exe);
+?>
+<div id="update-modal" tabindex="-1" aria-hidden="true" class="fixed inset-0 flex items-center justify-center">
     <div class="relative p-4 w-full max-w-md max-h-full">
         <!-- Modal content -->
         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
             <!-- Modal header -->
-            <div class="flex items
-            -center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                    Update Product
+                    Upadte Product
                 </h3>
-                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="edit-modal">
+                <button onclick="close()" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="edit-modal">
                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                     </svg>
@@ -181,42 +222,55 @@ if(isset($_POST['btn_add'])){
                 </button>
             </div>
             <!-- Modal body -->
-            <form class="p-4 md:p-5
-            " method="post">
+            <form class="p-4 md:p-5" method="post">
+            <input type="hidden" name="id_update" id="id_update">
                 <div class="grid gap-4 mb-4 grid-cols-2">
                     <div class="col-span-2">
                         <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
-                        <input type="text" name="productName" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                        <input value="<?=$product['productName']?>" type="text" name="productName" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name">
                     </div>
                     <div class="col-span-2 sm:col-span-1">
                         <label for="price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price</label>
-                        <input type="number" name="productPrice" id="price" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="$2999" required="">
+                        <input value="<?=$product['productPrice']?>" type="text" name="productPrice" id="price" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="$2999">
                     </div>
                     <div class="col-span-2 sm:col-span-1">
                         <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Category</label>
                         <select id="category" name="productCategory" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                            <option selected="">Select category</option>
-                            <option value="TV">Iphone</option>
-                            <option value="PC">Samsung</option>
-                            <option value="GA">Oppo</option>
-                            <option value="PH">Vivo</option>
+                     
+                        <option value="TV" <?= $product['productCategory'] === 'TV' ? 'selected' : '' ?>>Iphone</option>
+                        <option value="PC" <?= $product['productCategory'] === 'PC' ? 'selected' : '' ?>>Samsung</option>
+                        <option value="GA" <?= $product['productCategory'] === 'GA' ? 'selected' : '' ?>>Oppo</option>
+                        <option value="PH" <?= $product['productCategory'] === 'PH' ? 'selected' : '' ?>>Vivo</option>
                         </select>
                     </div>
-                    <div
-                    class="col-span-2">
+                    <div class="col-span-2">
                         <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Description</label>
-                        <textarea id="description" name="producrtDescription" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write product description here"></textarea>
+                        <textarea id="description" name="producrtDescription" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write product description here"><?=$product['productDescription']?></textarea>
+                                            
                     </div>
                 </div>
                 <button type="submit" name="btn_update" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                     <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
-                    Update product
+                    Add new product
                 </button>
             </form>
         </div>
     </div>
-</div>
+</div> 
+<?php
+}
+?>
+
+
+
+
+
 <!-- End Update modal -->
+
+
+
+
+
 
 <!-- Delete modal -->
 
@@ -301,43 +355,10 @@ Toggle modal
         });
     });
 });
+
+
 // End Modal Add Product
 
-// Modal Update Product
-document.addEventListener('DOMContentLoaded', () => {
-    const modalToggles = document.querySelectorAll('[data-modal-toggle="edit-modal"]');
-
-    modalToggles.forEach(toggle => {
-        toggle.addEventListener('click', () => {
-            const modalId = toggle.getAttribute('data-modal-target');
-            const modal = document.getElementById(modalId);
-
-            if (modal) {
-                if (modal.classList.contains('hidden')) {
-                    modal.classList.remove('hidden'); // Show modal
-                    modal.classList.add('flex'); // Add flex for alignment
-                } else {
-                    modal.classList.add('hidden'); // Hide modal
-                    modal.classList.remove('flex'); // Remove flex alignment
-                }
-            }
-        });
-    });
-
-    const modals = document.querySelectorAll('.fixed');
-    modals.forEach(modal => {
-        modal.addEventListener('click', (event) => {
-            const modalContent = modal.querySelector('.relative');
-            
-            // Check if click is outside modal content
-            if (event.target === modal || !modalContent.contains(event.target)) {
-                modal.classList.add('hidden'); // Hide modal
-                modal.classList.remove('flex'); // Remove flex alignment
-            }
-        });
-    });
-});
-// End Modal Update Product
 
 // Modal Delete Product
 document.addEventListener('DOMContentLoaded', function() {
@@ -354,6 +375,14 @@ function hide_delete_modal() {
     document.getElementById('popup-modal').classList.remove('flex');
 }
 // End Modal Delete Product
+
+
+// opent Modal update
+
+function close(){
+    // document.getElementById('update-modal').style.display = 'none';
+    document.getElementById('update-modal').classList.add('hidden');
+}
 
 </script>
 

@@ -3,7 +3,7 @@ session_start();
 require('../../connection.php');
 $tag = "";
 $op = "";
-$id = 0;
+$id = "";
 if(isset($_GET['tag'])){
     $tag = $_GET['tag'];
 }
@@ -19,6 +19,12 @@ if($op == 'logout'){
     // Redirect to index.php
     header('Location: ../../index.php');
 }
+
+if(isset($_POST['id'])){
+  $id = $_POST['id'];
+
+}
+
 
 
 
@@ -295,6 +301,11 @@ if(isset($id)){
       </div>
   </div>
 </aside>
+<!--  -->
+
+
+
+
 
 
 <?php
@@ -304,8 +315,6 @@ if($tag=='addmenu'){
     include('listMenu.php');
 }elseif($tag=='listProducts'){
     include('listProduct.php');
-}else{
-    echo"<h2>Hello</h2>" ;
 }
 ?>
 
